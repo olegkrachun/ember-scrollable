@@ -149,7 +149,7 @@ export default Component.extend(InboundActionsMixin, DomMixin, {
     scheduleOnce('afterRender', this, this.createScrollbarAndShowIfNecessary);
     this.addEventListener(window, 'mouseup', this.endDrag);
     this.setupResize();
-    this.resizeObserver.observe(this.element, this.send('recalculate'));
+    this.resizeObserver.observe(this.element, this.resizeScrollbar.bind(this));
 
     this.mouseMoveHandler = bind(this, this.onMouseMove);
     this.element.addEventListener('mousemove', this.mouseMoveHandler);
@@ -161,7 +161,10 @@ export default Component.extend(InboundActionsMixin, DomMixin, {
       'transitionend webkitTransitionEnd',
       this._resizeHandler
     );
-    this.resizeObserver.unobserve(this.element, this.send('recalculate'));
+    this.resizeObserver.unobserve(
+      this.element,
+      this.resizeScrollbar.bind(this)
+    );
 
     this.element.removeEventListener('mousemove', this.mouseMoveHandler);
     this.mouseMoveHandler = null;
